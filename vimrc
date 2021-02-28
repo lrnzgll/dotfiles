@@ -14,14 +14,31 @@ call plug#begin()
  Plug 'vim-airline/vim-airline-themes'
  Plug 'tpope/vim-surround'
  Plug 'tpope/vim-sensible' 
+ Plug 'tpope/vim-fugitive'
+ Plug 'mattn/emmet-vim'
+ Plug 'vim-test/vim-test'
+ Plug 'tpope/vim-dispatch'
 call plug#end()
 
-
-"VIm Settings
-
+" Use the space key as our leader. Put this near the top of your vimrc
+let mapleader = "\<Space>"
+" Leader shortcut
+nnoremap <silent><leader>b :Buffers<CR>
+""
+""
+""
+" Vim test conf
+nmap <silent><leader><C-n> :TestNearest<CR>
+nmap <silent><leader><C-f> :TestFile<CR>
+nmap <silent><leader><C-l> :TestLast<CR>
+nmap <silent><leader><C-s> :TestSuite<CR>
+let test#strategy = "dispatch"
+""
 set number
 set encoding=UTF-8
 set bs=2
+set tabstop=2
+set autoread
 "
 "VIm KeyBindings
 "
