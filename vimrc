@@ -9,15 +9,18 @@ call plug#begin()
  Plug 'Yggdroot/indentLine'
  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
  Plug 'junegunn/fzf.vim'
- Plug 'airblade/vim-rooter' 
+ Plug 'airblade/vim-rooter'
  Plug 'vim-airline/vim-airline'
  Plug 'vim-airline/vim-airline-themes'
  Plug 'tpope/vim-surround'
- Plug 'tpope/vim-sensible' 
+ Plug 'tpope/vim-sensible'
  Plug 'tpope/vim-fugitive'
  Plug 'mattn/emmet-vim'
  Plug 'vim-test/vim-test'
  Plug 'tpope/vim-dispatch'
+ Plug 'markstory/vim-zoomwin'
+ Plug 'tpope/vim-rails'
+ Plug 'w0rp/ale'
 call plug#end()
 
 " Use the space key as our leader. Put this near the top of your vimrc
@@ -28,10 +31,7 @@ nnoremap <silent><leader>b :Buffers<CR>
 ""
 ""
 " Vim test conf
-nmap <silent><leader><C-n> :TestNearest<CR>
-nmap <silent><leader><C-f> :TestFile<CR>
-nmap <silent><leader><C-l> :TestLast<CR>
-nmap <silent><leader><C-s> :TestSuite<CR>
+nmap <silent><leader>s :TestFile<CR>
 let test#strategy = "dispatch"
 ""
 set number
@@ -46,11 +46,15 @@ nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
-nmap <c-s> <C-w>s
-nmap <c-v> <C-w>v
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(1) * 2/3)<CR>
+nnoremap <C-a> <C-w>>
+nnoremap <C-b> <C-w><
 "
 "NERDTree Settings
 "
+let NERDTreeShowHidden=1
+
 "KeyBindings
 "
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -79,3 +83,29 @@ let g:airline_symbols.readonly = ''
 let g:airline_symbols.dirty='⚡'
 
 let g:airline_theme='tomorrow'
+
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\   'ruby': ['brakeman','rubocop'],
+\}
+let g:ale_fixers = {
+\		'ruby': ['rubocop'],
+\}
+let g:ale_fix_on_save = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_sign_column_always = 1
+
+" Skeleton for .rb files
+augroup ruby
+    " Remove all existing autocommands in the group
+    au!
+    au BufNewFile *.rb 0r ~/.vim/skeletons/ruby.skel
+augroup end
+
+" Remove trailing whitespaces
+autocmd BufWritePre * :%s/\s\+$//e
+
+highlight DiffText ctermfg=LightGray ctermbg=DarkGray guifg=#dadada guibg=#000000
+highlight DiffAdd ctermfg=253 ctermbg=DarkGray guifg=#dadada guibg=#000000
+highlight DiffChange ctermfg=253 ctermbg=DarkGray guifg=#dadada guibg=#000000
+
