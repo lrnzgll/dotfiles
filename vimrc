@@ -2,6 +2,7 @@
 "                                                                Custom
 " Display line number and relative line numbers
 set number
+
 set relativenumber
 set encoding=UTF-8
 
@@ -9,10 +10,11 @@ set encoding=UTF-8
 set bs=2
 
 " Set Tab
-set tabstop=2
+set tabstop=1
+set shiftwidth=1
+set expandtab
 
-" When a file has been detected to have been changed outside of Vim
-" and it has not been changed inside of Vim,
+" When a file has been detected to have been changed outside of Vim " and it has not been changed inside of Vim,
 " automatically read it again.
 set autoread
 
@@ -32,7 +34,7 @@ nmap <C-j> <C-w>j
 nmap <C-s> <C-w>s
 
 " Split Horizontally
-nmap <C-v> <C-w>v
+" nmap <C-v> <C-w>v
 
 " Start Macvim in fullscreen
 set fu
@@ -57,17 +59,20 @@ colorscheme evening
 "                                                               Plugins
 
 call plug#begin()
- Plug 'preservim/nerdtree'
- Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
- Plug 'ryanoasis/vim-devicons'
- Plug 'vim-airline/vim-airline'
- Plug 'vim-airline/vim-airline-themes'
- Plug 'junegunn/fzf.vim'
- Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
- Plug 'SirVer/ultisnips'
- Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
- Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
- Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
+  Plug 'preservim/nerdtree'
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
+  Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
+  Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
+  Plug 'Yggdroot/indentLine' " A vim plugin to display the indention levels with thin vertical lines
+  Plug 'vim-syntastic/syntastic' " Syntax checking hacks for vim
+  Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
 call plug#end()
 
 
@@ -124,8 +129,32 @@ nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>j <Plug>AirlineSelectPrevTab
 nmap <leader>k <Plug>AirlineSelectNextTab
+
 " ---------------------------------------------------------------------
 "                                                            FZF config
 nnoremap <C-p> :Files!<Cr>
 nnoremap <C-g> :Rg!<Cr>
 nnoremap <silent><leader>b :History!<CR>
+
+" ---------------------------------------------------------------------
+"                                                            indentLine
+
+let g:indentLine_bgcolor_gui = '#4b3b47'
+let g:indentLine_char_list = [' ']
+
+" ---------------------------------------------------------------------
+"                                                             Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+
+" ---------------------------------------------------------------------
+"                                                        vim-autoformat
+noremap <silent><leader>f :Autoformat<CR>
