@@ -1,9 +1,11 @@
 " ---------------------------------------------------------------------
 "                                                                Custom
+set cmdheight=1
+
 " Display line number and relative line numbers
 set number
+" set relativenumber
 
-set relativenumber
 set encoding=UTF-8
 
 " Set backspace
@@ -59,20 +61,22 @@ colorscheme evening
 "                                                               Plugins
 
 call plug#begin()
-  Plug 'preservim/nerdtree'
-  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'ryanoasis/vim-devicons'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'junegunn/fzf.vim'
-  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-  Plug 'SirVer/ultisnips'
-  Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
-  Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
-  Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
-  Plug 'Yggdroot/indentLine' " A vim plugin to display the indention levels with thin vertical lines
-  Plug 'vim-syntastic/syntastic' " Syntax checking hacks for vim
-  Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
+ Plug 'preservim/nerdtree'
+ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+ Plug 'vim-syntastic/syntastic' " Syntax checking hacks for vim
+ Plug 'ryanoasis/vim-devicons'
+ Plug 'vim-airline/vim-airline'
+ Plug 'vim-airline/vim-airline-themes'
+ Plug 'junegunn/fzf.vim'
+ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+ Plug 'SirVer/ultisnips'
+ Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
+ Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
+ Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
+ Plug 'Yggdroot/indentLine' " A vim plugin to display the indention levels with thin vertical lines
+ Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
+ Plug 'vim-test/vim-test'
+ Plug 'tpope/vim-fugitive' " A Git wrapper so awesome, it should be illegal
 call plug#end()
 
 
@@ -142,19 +146,37 @@ nnoremap <silent><leader>b :History!<CR>
 let g:indentLine_bgcolor_gui = '#4b3b47'
 let g:indentLine_char_list = [' ']
 
-" ---------------------------------------------------------------------
-"                                                             Syntastic
+"" ---------------------------------------------------------------------
+""                                                             Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
+"
+let g:syntastic_ruby_rubocop_args =  '-c /Users/lorenzogalli/dev/Charlie/.rubocop.yml'
+let g:syntastic_ruby_rubocop_exec = '/Users/lorenzogalli/.rbenv/versions/2.7.5/lib/ruby/gems/2.7.0/gems/rubocop-0.93.1/lib/rubocop.rb'
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
+""
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
-
+""
 " ---------------------------------------------------------------------
 "                                                        vim-autoformat
 noremap <silent><leader>f :Autoformat<CR>
+
+" ---------------------------------------------------------------------
+"                                                              vim-test
+
+let test#strategy = "vimterminal"
+
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
+
+" ---------------------------------------------------------------------
+"                                                          vim-fugitive
+
+set statusline+=%{FugitiveStatusline()}
+
