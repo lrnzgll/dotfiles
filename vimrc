@@ -1,5 +1,9 @@
 " ---------------------------------------------------------------------
 "                                                                Custom
+" Mouse resizing :-)
+set mouse=a
+set ttymouse=xterm2
+
 set cmdheight=1
 
 " Display line number and relative line numbers
@@ -51,24 +55,19 @@ set guifont=Droid\ Sans\ Mono\ Nerd\ Font\ Complete:h16
 " Remove trailing whitespaces
 autocmd BufWritePre * :%s/\s\+$//e
 
-" Color scheme
-syntax enable
-set background=dark
-colorscheme evening
-" colorscheme Tomorrow-Night
-
 " ---------------------------------------------------------------------
 "                                                               Plugins
 
 call plug#begin()
+ Plug 'morhetz/gruvbox'
  Plug 'preservim/nerdtree'
  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
  Plug 'vim-syntastic/syntastic' " Syntax checking hacks for vim
  Plug 'ryanoasis/vim-devicons'
  Plug 'vim-airline/vim-airline'
  Plug 'vim-airline/vim-airline-themes'
- Plug 'junegunn/fzf.vim'
  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+ Plug 'junegunn/fzf.vim'
  Plug 'SirVer/ultisnips'
  Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
  Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
@@ -81,11 +80,22 @@ call plug#end()
 
 
 " ---------------------------------------------------------------------
+"                                                            Coloscheme
+
+if has("gui_running")
+ autocmd vimenter * ++nested colorscheme gruvbox
+ set background=dark
+else
+ autocmd vimenter * ++nested colorscheme gruvbox
+ set background=dark
+endif
+
+" ---------------------------------------------------------------------
 "                                                       NERDTree config
 
 let NERDTreeShowHidden=1
 
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-t> :NERDTreeToggle %<CR>
 "
 " Exit Vim if NERDTree is the only window left.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
