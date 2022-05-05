@@ -28,7 +28,8 @@ set autoread
 set hlsearch
 
 " Set NO line wrap
-set nowrap
+" set nowrap
+set wrap
 
 " Move between splits
 nmap <C-h> <C-w>h
@@ -41,9 +42,6 @@ nmap <C-s> <C-w>s
 
 " Split Horizontally
 " nmap <C-v> <C-w>v
-
-" Start Macvim in fullscreen
-set fu
 
 " Set leader to Spacebar
 let mapleader = "\<Space>"
@@ -76,6 +74,7 @@ call plug#begin()
  Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
  Plug 'vim-test/vim-test'
  Plug 'tpope/vim-fugitive' " A Git wrapper so awesome, it should be illegal
+ Plug 'tpope/vim-rails' " Ruby on Rails power tools
 call plug#end()
 
 
@@ -149,6 +148,7 @@ nmap <leader>k <Plug>AirlineSelectNextTab
 nnoremap <C-p> :Files!<Cr>
 nnoremap <C-g> :Rg!<Cr>
 nnoremap <silent><leader>b :History!<CR>
+nnoremap <C-b> :Buffers<Cr>
 
 " ---------------------------------------------------------------------
 "                                                            indentLine
@@ -162,12 +162,10 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 "
-let g:syntastic_ruby_rubocop_args =  '-c /Users/lorenzogalli/dev/Charlie/.rubocop.yml'
-let g:syntastic_ruby_rubocop_exec = '/Users/lorenzogalli/.rbenv/versions/2.7.5/lib/ruby/gems/2.7.0/gems/rubocop-0.93.1/lib/rubocop.rb'
+"let g:syntastic_ruby_rubocop_args =  '-c /Users/lorenzo/dev/Charlie/.rubocop.yml'
+let g:systastic_ruby_exec = '/Users/lorenzo/.rbenv/shims/rubocop'
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
 ""
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 ""
