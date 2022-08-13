@@ -53,6 +53,9 @@ set guifont=Droid\ Sans\ Mono\ Nerd\ Font\ Complete:h16
 " Remove trailing whitespaces
 autocmd BufWritePre * :%s/\s\+$//e
 
+" Folding strategy
+set foldmethod=syntax
+set foldlevel=99
 " ---------------------------------------------------------------------
 "                                                               Plugins
 
@@ -75,7 +78,9 @@ call plug#begin()
  Plug 'vim-test/vim-test'
  Plug 'tpope/vim-fugitive' " A Git wrapper so awesome, it should be illegal
  Plug 'tpope/vim-rails' " Ruby on Rails power tools
-call plug#end()
+ Plug 'tpope/vim-unimpaired' " Handy brackets mappings
+ Plug 'tpope/vim-surround' " Delete/change/add parentheses/quotes/...
+ call plug#end()
 
 
 " ---------------------------------------------------------------------
@@ -114,6 +119,10 @@ let NERDTreeIgnore=[
 
 " ---------------------------------------------------------------------
 "                                                    vim-airline config
+
+let g:airline_section_z = ''
+let g:airline_section_y = ''
+let g:airline#extensions#branch#enabled=0
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
@@ -158,6 +167,7 @@ let g:indentLine_char_list = [' ']
 
 "" ---------------------------------------------------------------------
 ""                                                             Syntastic
+set statusline+=%f
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -188,3 +198,7 @@ nmap <silent> <leader>g :TestVisit<CR>
 
 set statusline+=%{FugitiveStatusline()}
 
+" --------------------------------------------------------------------
+"                                                            vim-rails
+
+nmap <silent><leader>c :Rails console<CR>
