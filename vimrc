@@ -16,8 +16,8 @@ set encoding=UTF-8
 set bs=2
 
 " Set Tab
-set tabstop=1
-set shiftwidth=1
+set tabstop=2
+set shiftwidth=2
 set expandtab
 
 " When a file has been detected to have been changed outside of Vim " and it has not been changed inside of Vim,
@@ -70,7 +70,7 @@ call plug#begin()
  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
  Plug 'junegunn/fzf.vim'
  Plug 'SirVer/ultisnips'
- Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
+ "Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
  Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
  Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
  Plug 'Yggdroot/indentLine' " A vim plugin to display the indention levels with thin vertical lines
@@ -80,8 +80,17 @@ call plug#begin()
  Plug 'tpope/vim-rails' " Ruby on Rails power tools
  Plug 'tpope/vim-unimpaired' " Handy brackets mappings
  Plug 'tpope/vim-surround' " Delete/change/add parentheses/quotes/...
- call plug#end()
+ Plug 'mrdotb/vim-tailwindcss'
+ Plug 'jayli/vim-easycomplete'
+call plug#end()
 
+
+" ---------------------------------------------------------------------
+"                                                             Ultisnips
+let g:UltiSnipsExpandTrigger="§"
+
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
 " ---------------------------------------------------------------------
 "                                                            Coloscheme
@@ -173,7 +182,7 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 "
 "let g:syntastic_ruby_rubocop_args =  '-c /Users/lorenzo/dev/Charlie/.rubocop.yml'
-let g:systastic_ruby_exec = '/Users/lorenzo/.rbenv/shims/rubocop'
+"let g:systastic_ruby_exec = '/Users/lorenzo/.rbenv/shims/rubocop'
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 ""
@@ -202,3 +211,11 @@ set statusline+=%{FugitiveStatusline()}
 "                                                            vim-rails
 
 nmap <silent><leader>c :Rails console<CR>
+" ---------------------------------------------------------------------
+"                                                      vim-tailwindscss
+" Set the completefunc you can do this per file basis or with a mapping
+set completefunc=tailwind#complete
+" The mapping I use
+nnoremap <leader>c :set completefunc=tailwind#complete<cr>
+" Add this autocmd to your vimrc to close the preview window after the completion is done
+autocmd CompleteDone * pclose
