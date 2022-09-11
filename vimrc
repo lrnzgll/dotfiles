@@ -60,28 +60,27 @@ set foldlevel=99
 "                                                               Plugins
 
 call plug#begin()
- Plug 'morhetz/gruvbox'
- Plug 'preservim/nerdtree'
- Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
- Plug 'vim-syntastic/syntastic' " Syntax checking hacks for vim
- Plug 'ryanoasis/vim-devicons'
- Plug 'vim-airline/vim-airline'
- Plug 'vim-airline/vim-airline-themes'
- Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
- Plug 'junegunn/fzf.vim'
- Plug 'SirVer/ultisnips'
- "Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
- Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
- Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
- Plug 'Yggdroot/indentLine' " A vim plugin to display the indention levels with thin vertical lines
- Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
- Plug 'vim-test/vim-test'
- Plug 'tpope/vim-fugitive' " A Git wrapper so awesome, it should be illegal
- Plug 'tpope/vim-rails' " Ruby on Rails power tools
- Plug 'tpope/vim-unimpaired' " Handy brackets mappings
- Plug 'tpope/vim-surround' " Delete/change/add parentheses/quotes/...
- Plug 'mrdotb/vim-tailwindcss'
- Plug 'jayli/vim-easycomplete'
+Plug 'morhetz/gruvbox'
+Plug 'preservim/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'vim-syntastic/syntastic' " Syntax checking hacks for vim
+Plug 'ryanoasis/vim-devicons'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
+Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
+Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
+Plug 'Yggdroot/indentLine' " A vim plugin to display the indention levels with thin vertical lines
+Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
+Plug 'vim-test/vim-test'
+Plug 'tpope/vim-fugitive' " A Git wrapper so awesome, it should be illegal
+Plug 'tpope/vim-rails' " Ruby on Rails power tools
+Plug 'tpope/vim-unimpaired' " Handy brackets mappings
+Plug 'tpope/vim-surround' " Delete/change/add parentheses/quotes/...
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 
@@ -96,11 +95,11 @@ let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 "                                                            Coloscheme
 
 if has("gui_running")
- autocmd vimenter * ++nested colorscheme gruvbox
- set background=dark
+  autocmd vimenter * ++nested colorscheme gruvbox
+  set background=dark
 else
- autocmd vimenter * ++nested colorscheme gruvbox
- set background=dark
+  autocmd vimenter * ++nested colorscheme gruvbox
+  set background=dark
 endif
 
 " ---------------------------------------------------------------------
@@ -112,15 +111,15 @@ nnoremap <C-t> :NERDTreeToggle %<CR>
 "
 " Exit Vim if NERDTree is the only window left.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
+      \ quit | endif
 
 let NERDTreeIgnore=[
-    \ '.git$[[dir]]',
-    \ '.vscode$[[dir]]',
-    \ '.idea$[[dir]]',
-    \ '.DS_Store$[[file]]',
-    \ '.swp$[[file]]'
-\ ]
+      \ '.git$[[dir]]',
+      \ '.vscode$[[dir]]',
+      \ '.idea$[[dir]]',
+      \ '.DS_Store$[[file]]',
+      \ '.swp$[[file]]'
+      \ ]
 
 " ---------------------------------------------------------------------
 "                                                   vim-devicons config
@@ -187,6 +186,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 ""
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exec = 'eslint_d'
 ""
 " ---------------------------------------------------------------------
 "                                                        vim-autoformat
@@ -212,10 +213,14 @@ set statusline+=%{FugitiveStatusline()}
 
 nmap <silent><leader>c :Rails console<CR>
 " ---------------------------------------------------------------------
-"                                                      vim-tailwindscss
-" Set the completefunc you can do this per file basis or with a mapping
-set completefunc=tailwind#complete
-" The mapping I use
-nnoremap <leader>c :set completefunc=tailwind#complete<cr>
-" Add this autocmd to your vimrc to close the preview window after the completion is done
-autocmd CompleteDone * pclose
+"                                                              coc.nvim
+set pumheight=20
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
