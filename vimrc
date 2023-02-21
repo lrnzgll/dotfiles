@@ -20,7 +20,7 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
-" When a file has been detected to have been changed outside of Vim " and it has not been changed inside of Vim,
+" When a file has been detected to have been changed outside of Vim  and it has not been changed inside of Vim,
 " automatically read it again.
 set autoread
 
@@ -56,14 +56,21 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Folding strategy
 set foldmethod=syntax
 set foldlevel=99
+
+" Terminal shortcut
+
+map <Leader>u :vert term ++close<cr>
+tmap <Leader>u :vert term ++close<cr>
+
 " ---------------------------------------------------------------------
 "                                                               Plugins
 
 call plug#begin()
+Plug 'chrisbra/csv.vim'
 Plug 'morhetz/gruvbox'
+Plug 'whatyouhide/vim-gotham'
 Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'vim-syntastic/syntastic' " Syntax checking hacks for vim
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -73,16 +80,17 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
 Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
 Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
-Plug 'Yggdroot/indentLine' " A vim plugin to display the indention levels with thin vertical lines
 Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
 Plug 'vim-test/vim-test'
 Plug 'tpope/vim-fugitive' " A Git wrapper so awesome, it should be illegal
-Plug 'tpope/vim-rails' " Ruby on Rails power tools
 Plug 'tpope/vim-unimpaired' " Handy brackets mappings
 Plug 'tpope/vim-surround' " Delete/change/add parentheses/quotes/...
+Plug 'elixir-editors/vim-elixir'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'dense-analysis/ale'
+Plug 'zefei/vim-wintabs'
+Plug 'zefei/vim-wintabs-powerline'
 call plug#end()
-
 
 " ---------------------------------------------------------------------
 "                                                             Ultisnips
@@ -99,7 +107,6 @@ if has("gui_running")
   set background=dark
 else
   autocmd vimenter * ++nested colorscheme gruvbox
-  set background=dark
 endif
 
 " ---------------------------------------------------------------------
@@ -128,9 +135,6 @@ let NERDTreeIgnore=[
 " ---------------------------------------------------------------------
 "                                                    vim-airline config
 
-let g:airline_section_z = ''
-let g:airline_section_y = ''
-let g:airline#extensions#branch#enabled=0
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
@@ -147,7 +151,6 @@ let g:airline_symbols.dirty='⚡'
 
 "
 " Open tabline on top
-let g:airline#extensions#tabline#enabled = 1
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
@@ -159,6 +162,8 @@ nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>j <Plug>AirlineSelectPrevTab
 nmap <leader>k <Plug>AirlineSelectNextTab
+
+let g:airline#extensions#ale#enabled = 1
 
 " ---------------------------------------------------------------------
 "                                                            FZF config
@@ -173,22 +178,6 @@ nnoremap <C-b> :Buffers<Cr>
 let g:indentLine_bgcolor_gui = '#4b3b47'
 let g:indentLine_char_list = [' ']
 
-"" ---------------------------------------------------------------------
-""                                                             Syntastic
-set statusline+=%f
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-"
-"let g:syntastic_ruby_rubocop_args =  '-c /Users/lorenzo/dev/Charlie/.rubocop.yml'
-"let g:systastic_ruby_exec = '/Users/lorenzo/.rbenv/shims/rubocop'
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-""
-let g:syntastic_ruby_checkers = ['mri', 'rubocop']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exec = 'eslint_d'
-""
 " ---------------------------------------------------------------------
 "                                                        vim-autoformat
 noremap <silent><leader>f :Autoformat<CR>
@@ -212,9 +201,21 @@ set statusline+=%{FugitiveStatusline()}
 "                                                            vim-rails
 
 nmap <silent><leader>c :Rails console<CR>
-" ---------------------------------------------------------------------
-"                                                              coc.nvim
-set pumheight=20
+
+" -------------------------------------------------------------------
+"  syntax highlight Elixir
+au BufRead,BufNewFile *.ex,*.exs set filetype=elixir
+au BufRead,BufNewFile *.eex,*.heex,*.leex,*.sface,*.lexs set filetype=eelixir
+au BufRead,BufNewFile mix.lock set filetype=elixir
+
+" mix format
+" autocmd BufWritePost *.exs,*.ex,*.heex silent :!mix format %
+" ------------------------------------------------------------------
+"                                                           coc.nvim
+set pumheight=10
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
+" use <tab> for trigger completion and navigate to the next complete item
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -224,3 +225,26 @@ inoremap <silent><expr> <Tab>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
+
+" ----------------------------------------------------------------
+"                                                              ALE
+let g:ale_linters = {
+\   'elixir': ['elixir-ls', 'mix', 'dogma'],
+\}
+
+let g:ale_fixers = {
+\ 'elixir': ['mix_format'],
+\ 'eelixir': ['mix_format'],
+\ 'scss': ['stylelint'],
+\ 'css': ['stylelint'],
+\ 'javascript': ['eslint'],
+\ 'ruby': ['rubocop']
+\}
+
+let g:ale_fix_on_save = 1
+
+" ----------------------------------------------------------------
+"                                                          WinTabs
+
+map <C-N> <Plug>(wintabs_previous)
+map <C-M> <Plug>(wintabs_next)"
