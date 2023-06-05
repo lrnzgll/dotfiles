@@ -1,8 +1,9 @@
 " ---------------------------------------------------------------------
 "                                                                Custom
 " Mouse resizing :-)
-set mouse=a
-set ttymouse=xterm2
+set mouse+=a
+"-set ttymouse=xterm2
+set ttymouse=sgr
 
 set cmdheight=1
 
@@ -69,8 +70,6 @@ call plug#begin()
 Plug 'chrisbra/csv.vim'
 Plug 'morhetz/gruvbox'
 Plug 'whatyouhide/vim-gotham'
-Plug 'preservim/nerdtree'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -79,17 +78,15 @@ Plug 'junegunn/fzf.vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets' " Adds loads of Ruby Snippets - check with :Snippets
 Plug 'markstory/vim-zoomwin' "A simple vim plugin to focus or zoom in on a single split window and be able to restore it again.
-Plug 'preservim/tagbar' " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file and get an overview of its structure.
 Plug 'vim-autoformat/vim-autoformat' " Provide easy code formatting in Vim by integrating existing code formatters
 Plug 'vim-test/vim-test'
 Plug 'tpope/vim-fugitive' " A Git wrapper so awesome, it should be illegal
 Plug 'tpope/vim-unimpaired' " Handy brackets mappings
 Plug 'tpope/vim-surround' " Delete/change/add parentheses/quotes/...
+Plug 'tpope/vim-rails'
 Plug 'elixir-editors/vim-elixir'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'dense-analysis/ale'
-Plug 'zefei/vim-wintabs'
-Plug 'zefei/vim-wintabs-powerline'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 " ---------------------------------------------------------------------
@@ -230,21 +227,18 @@ inoremap <silent><expr> <Tab>
 "                                                              ALE
 let g:ale_linters = {
 \   'elixir': ['elixir-ls', 'mix', 'dogma'],
+\   'ruby': ['standardrb', 'brakeman', 'cspell', 'reek'],
+\   'scss': ['scsslint'],
+\   'eruby': ['erblint'],
 \}
 
 let g:ale_fixers = {
+\ 'html': ['prettier'],
 \ 'elixir': ['mix_format'],
 \ 'eelixir': ['mix_format'],
-\ 'scss': ['stylelint'],
-\ 'css': ['stylelint'],
 \ 'javascript': ['eslint'],
-\ 'ruby': ['rubocop']
+\ 'ruby': ['standardrb'],
+\ 'eruby': ['erblint'],
 \}
 
 let g:ale_fix_on_save = 1
-
-" ----------------------------------------------------------------
-"                                                          WinTabs
-
-map <C-N> <Plug>(wintabs_previous)
-map <C-M> <Plug>(wintabs_next)"
