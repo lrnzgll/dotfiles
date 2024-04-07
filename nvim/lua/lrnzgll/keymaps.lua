@@ -54,10 +54,9 @@ keymap("x", "<A-k>", ":m '<-2<CR>gv=gv", opts)
 -- Telescope --
 
 local builtin = require('telescope.builtin')
-keymap('n', '<leader>ff', builtin.find_files, opts)
-keymap('n', '<leader>fs', builtin.grep_string, opts)
-keymap('n', '<leader>fg', builtin.live_grep, opts)
-keymap('n', '<leader>fb', builtin.buffers, opts)
+keymap('n', '<leader>p', builtin.find_files, opts)
+keymap('n', '<leader>g', builtin.live_grep, opts)
+keymap('n', '<leader>b', builtin.buffers, opts)
 keymap('n', '<leader>fd', builtin.lsp_definitions, opts)
 keymap('n', '<leader>fi', builtin.lsp_implementations, opts)
 keymap('n', '<leader>t', "<cmd>NvimTreeToggle<cr>", opts)
@@ -66,17 +65,22 @@ keymap('n', '<leader>t', "<cmd>NvimTreeToggle<cr>", opts)
 -- Neotest --
 local neotest = require('neotest')
 
-keymap('n', '<leader>tf', function() 
+keymap('n', '<leader>rf', function() 
   neotest.run.run(vim.fn.expand("%")) 
   neotest.summary.open()
 end, opts)
-keymap('n', '<leader>ts', function() 
+keymap('n', '<leader>rs', function() 
   neotest.run.run() 
   neotest.summary.open()
 end, opts)
 
-keymap('n', '<leader>tw', function() 
+keymap('n', '<leader>rw', function() 
   neotest.watch.toggle()
 end, opts)
 
 
+keymap('i', '<C-e>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
